@@ -48,7 +48,7 @@ func main() {
 	s := mat64.NewDense(1, n, nil)
 	x, dx := 0.0, 0.01
 	xary := make([]float64, 0, n)
-	yaryTrue := make([]float64, 0, n)
+	yaryOrig := make([]float64, 0, n)
 
 	for i := 0; i < n; i++ {
 		y := math.Sin(x) + 0.1*(rand.NormFloat64()-0.5)
@@ -56,11 +56,11 @@ func main() {
 		x += dx
 
 		xary = append(xary, x)
-		yaryTrue = append(yaryTrue, y)
+		yaryOrig = append(yaryOrig, y)
 	}
 
 	filtered := filter.Filter(s)
-	yaryEst := mat64.Row(nil, 0, filtered)
+	yaryFilt := mat64.Row(nil, 0, filtered)
 
 	//
 	// plot
@@ -72,8 +72,8 @@ func main() {
 	}
 
 	err = plotutil.AddLinePoints(p,
-		"True", generatePoints(xary, yaryTrue),
-		"Estimated", generatePoints(xary, yaryEst),
+		"Original", generatePoints(xary, yaryOrig),
+		"Filtered", generatePoints(xary, yaryFilt),
 	)
 	if err != nil {
 		panic(err)
